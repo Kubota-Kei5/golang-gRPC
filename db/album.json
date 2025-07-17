@@ -1,0 +1,252 @@
+[
+	{
+		"title": "Blue Train",
+		"artist": "John Coltrane",
+		"price": 56.99
+	},
+	{
+		"title": "Jeru",
+		"artist": "Gerry Mulligan",
+		"price": 17.99
+	},
+	{
+		"title": "Sarah Vaughan and Clifford Brown",
+		"artist": "Sarah Vaughan",
+		"price": 39.99
+	},
+	{
+		"title": "A Love Supreme",
+		"artist": "John Coltrane",
+		"price": 25.99
+	},
+	{
+		"title": "Kind of Blue",
+		"artist": "Miles Davis",
+		"price": 29.99
+	},
+	{
+		"title": "Time Out",
+		"artist": "The Dave Brubeck Quartet",
+		"price": 22.99
+	},
+	{
+		"title": "Getz/Gilberto",
+		"artist": "Stan Getz",
+		"price": 34.99
+	},
+	{
+		"title": "The Shape of Jazz to Come",
+		"artist": "Ornette Coleman",
+		"price": 31.99
+	},
+	{
+		"title": "Mingus Ah Um",
+		"artist": "Charles Mingus",
+		"price": 27.99
+	},
+	{
+		"title": "The Black Saint and the Sinner Lady",
+		"artist": "Charles Mingus",
+		"price": 30.99
+	},
+	{
+		"title": "Giant Steps",
+		"artist": "John Coltrane",
+		"price": 36.99
+	},
+	{
+		"title": "Bitches Brew",
+		"artist": "Miles Davis",
+		"price": 44.99
+	},
+	{
+		"title": "Speak No Evil",
+		"artist": "Wayne Shorter",
+		"price": 19.99
+	},
+	{
+		"title": "Moanin'",
+		"artist": "Art Blakey",
+		"price": 24.99
+	},
+	{
+		"title": "Blues Walk",
+		"artist": "Clifford Brown",
+		"price": 20.99
+	},
+	{
+		"title": "The Real McCoy",
+		"artist": "McCoy Tyner",
+		"price": 28.99
+	},
+	{
+		"title": "Night Train",
+		"artist": "Oscar Peterson",
+		"price": 23.99
+	},
+	{
+		"title": "Bright Size Life",
+		"artist": "Pat Metheny",
+		"price": 32.99
+	},
+	{
+		"title": "Ella and Louis",
+		"artist": "Ella Fitzgerald",
+		"price": 21.99
+	},
+	{
+		"title": "In a Silent Way",
+		"artist": "Miles Davis",
+		"price": 29.99
+	},
+	{
+		"title": "Blues for Alice",
+		"artist": "Charlie Parker",
+		"price": 18.99
+	},
+	{
+		"title": "Weather Report",
+		"artist": "Weather Report",
+		"price": 35.99
+	},
+	{
+		"title": "Beyond the Missouri Sky",
+		"artist": "Charlie Haden",
+		"price": 26.99
+	},
+	{
+		"title": "Alive",
+		"artist": "Keith Jarrett",
+		"price": 40.99
+	},
+	{
+		"title": "Takin' Off",
+		"artist": "Herbie Hancock",
+		"price": 30.99
+	},
+	{
+		"title": "Cannonball Adderley Quintet in San Francisco",
+		"artist": "Cannonball Adderley",
+		"price": 22.99
+	},
+	{
+		"title": "Nefertiti",
+		"artist": "Miles Davis",
+		"price": 34.99
+	},
+	{
+		"title": "The Sidewinder",
+		"artist": "Lee Morgan",
+		"price": 27.99
+	},
+	{
+		"title": "Agharta",
+		"artist": "Miles Davis",
+		"price": 42.99
+	},
+	{
+		"title": "Ascension",
+		"artist": "John Coltrane",
+		"price": 38.99
+	},
+	{
+		"title": "Dance of the Infidels",
+		"artist": "Thelonious Monk",
+		"price": 20.99
+	},
+	{
+		"title": "The Amazing Bud Powell",
+		"artist": "Bud Powell",
+		"price": 24.99
+	},
+	{
+		"title": "Benny Goodman in Moscow",
+		"artist": "Benny Goodman",
+		"price": 18.99
+	},
+	{
+		"title": "A Portrait in Jazz",
+		"artist": "Bill Evans",
+		"price": 29.99
+	},
+	{
+		"title": "Head Hunters",
+		"artist": "Herbie Hancock",
+		"price": 36.99
+	},
+	{
+		"title": "The Art of the Trio, Vol. 1",
+		"artist": "Brad Mehldau",
+		"price": 25.99
+	},
+	{
+		"title": "Saxophone Colossus",
+		"artist": "Sonny Rollins",
+		"price": 21.99
+	},
+	{
+		"title": "It Could Happen to You",
+		"artist": "Chet Baker",
+		"price": 23.99
+	},
+	{
+		"title": "Still Dreaming",
+		"artist": "Ravi Coltrane",
+		"price": 33.99
+	},
+	{
+		"title": "Porgy and Bess",
+		"artist": "Billie Holiday",
+		"price": 39.99
+	},
+	{
+		"title": "Chick Corea Elektric Band",
+		"artist": "Chick Corea",
+		"price": 31.99
+	},
+	{
+		"title": "The Best of John Coltrane",
+		"artist": "John Coltrane",
+		"price": 37.99
+	},
+	{
+		"title": "Fusion",
+		"artist": "Weather Report",
+		"price": 45.99
+	},
+	{
+		"title": "Seven Steps to Heaven",
+		"artist": "Miles Davis",
+		"price": 28.99
+	},
+	{
+		"title": "Time for Love",
+		"artist": "George Benson",
+		"price": 24.99
+	},
+	{
+		"title": "The Gift",
+		"artist": "Wynton Marsalis",
+		"price": 26.99
+	},
+	{
+		"title": "Jazz at Massey Hall",
+		"artist": "The Quintet",
+		"price": 35.99
+	},
+	{
+		"title": "Song for My Father",
+		"artist": "Horace Silver",
+		"price": 29.99
+	},
+	{
+		"title": "Chet Baker Sings",
+		"artist": "Chet Baker",
+		"price": 22.99
+	},
+	{
+		"title": "Blue Note: A Story of Modern Jazz",
+		"artist": "Various Artists",
+		"price": 18.99
+	}
+]
