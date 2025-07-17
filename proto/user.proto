@@ -1,0 +1,39 @@
+// user.protoファイル
+
+syntax = "proto3"; // Protocol Buffersのバージョンを指定
+
+package user; // 名前空間を指定
+
+option go_package = "path/to/dir/"; // このファイルをもとに生成されるGoコードのインポートパス
+
+// ユーザー情報のデータ構造
+message User {
+    int32 id = 1;
+    string name = 2;
+    repeated string phone_numbers = 3; // ユーザーの電話番号（複数可）
+    Address address = 4;  // ユーザーの住所（Addressメッセージ）
+}
+
+// ユーザーの住所情報のデータ構造
+message Address {
+    string street = 1;
+    string city = 2;
+    string state = 3;
+    int32 zipcode = 4;
+}
+
+// ユーザー情報取得のためのリクエスト
+message GetUserRequest {
+    string id = 1; // リクエストとして送るユーザーのID
+}
+
+// ユーザー情報取得リクエストに対するレスポンス
+message GetUserResponse {
+    User user = 1; // レスポンスとして返されるユーザー情報
+}
+
+// ユーザー情報を取得するためのgRPCサービス
+service UserService {
+    // GetUserリクエストを受け取り、ユーザー情報を返すRPCメソッド
+    rpc GetUser (GetUserRequest) returns (GetUserResponse);
+}
