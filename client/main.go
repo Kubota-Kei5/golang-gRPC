@@ -33,6 +33,29 @@ func callGetAlbum(client pb.AlbumServiceClient, title string) {
 	log.Printf("response: %v", resp.Album)
 }
 
+// Server Streaming RPC
+// サーバーにartistを送り、ファイルに存在するAlbumをすべてAlbum型で受け取る関数
+func callListAlbums(client pb.AlbumServiceClient, artist string) {
+	ctx, cancel := context.WithTimeout(context.Background(), timeoutDuration)
+	defer cancel()
+
+	// ListAlbumsメソッドを呼び出してサーバーにリクエストを送り、ストリームを受け取る
+	stream, err := client.ListAlbums(ctx, &pb.ListAlbumsRequest{Artist: artist})
+	if err != nil {
+		log.Fatalf("client.ListAlbums failed: %v", err)
+	}
+
+	for {
+		resp, err := stream.Recv()
+		if err != nil {
+			log.Printf("stream.Recv failed: %v", err)
+			break
+		}
+
+		log.Printf("response: %v", resp.Album)
+	}
+}
+
 func main() {
 	conn, err := grpc.NewClient(serverAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
@@ -42,7 +65,9 @@ func main() {
 	defer conn.Close()
 	client := pb.NewAlbumServiceClient(conn)
 
-	// callGetAlbumを実行
 	callGetAlbum(client, "Blue Train")
 	callGetAlbum(client, "Not Exist Title")
+
+	// callGetAlbumを実行
+	callListAlbums(client, "Miles Davis")
 }

@@ -8,6 +8,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"time"
 
 	"google.golang.org/grpc"
 )
@@ -15,6 +16,8 @@ import (
 const (
 	filePath = "db/album.json" // JSONファイルに保存されたアルバムデータのパス
 	port     = "50051"
+
+	timeSleep = 1 * time.Second // レスポンス間のスリープ時間
 )
 
 type AlbumServer struct {
@@ -36,6 +39,25 @@ func (s *AlbumServer) GetAlbum(ctx context.Context, req *pb.GetAlbumRequest) (*p
 	log.Printf("album not found: %s", req.Title)
 	return &pb.GetAlbumResponse{Album: &pb.Album{}}, nil
 }
+
+// Server Streaming RPC
+// クライアントからartistを受け取り、artistが一致するAlbumをすべてAlbum型で返すメソッド
+func (s *AlbumServer) ListAlbums(req *pb.ListAlbumsRequest, stream pb.AlbumService_ListAlbumsServer) error {
+	log.Printf("request: %s", req.Artist)
+
+	for _, album := range s.savedAlbums {
+		if album.Artist == req.Artist {
+			// ストリーム形式のレスポンス
+			if err := stream.Send(&pb.ListAlbumsResponse{Album: album}); err != nil {
+				return err
+			}
+			time.Sleep(timeSleep)
+		}
+	}
+
+	return nil
+}
+
 
 // サーバーの初期化時にアルバムデータをロードするメソッド
 func (s *AlbumServer) loadAlbums(filePath string) error {
