@@ -2,6 +2,7 @@ package main
 
 import (
 	"awsomeProject/pb"
+	"awsomeProject/server/interceptor"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -196,7 +197,9 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(
+		grpc.UnaryInterceptor(interceptor.UnaryServerInterceptor()), // Unary RPCのインターセプターを設定
+	)
 	pb.RegisterAlbumServiceServer(grpcServer, newServer()) // 作成したサーバーをgrpcServerに登録
 
 	log.Println("server started")

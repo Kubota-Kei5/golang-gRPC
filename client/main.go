@@ -160,13 +160,13 @@ func main() {
 	defer conn.Close()
 	client := pb.NewAlbumServiceClient(conn)
 
-	// callGetAlbum(client, "Blue Train")
-	// callGetAlbum(client, "Not Exist Title")
+	// Unary RPCを実行
+	callGetAlbum(client, "Blue Train")
+	callGetAlbum(client, "Not Exist Title")
 
 	// callListAlbums(client, "Miles Davis")
 
 	// callGetTotalAmount(client)
 
-	// callGetAlbumを実行
-	callUploadAndNotify(client)
+	// callUploadAndNotify(client)
 }
