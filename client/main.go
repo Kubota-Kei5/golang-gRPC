@@ -3,6 +3,7 @@ package main
 import (
 	"awsomeProject/pb"
 	"context"
+	"io"
 	"log"
 	"time"
 
@@ -94,6 +95,62 @@ func callGetTotalAmount(client pb.AlbumServiceClient) {
 	log.Printf("response: %v", resp)
 }
 
+// Bidirectional Streaming RPC
+// サーバーに複数のAlbumを連続で送信し、そのたびにサーバーからのメッセージを受け取る関数
+func callUploadAndNotify(client pb.AlbumServiceClient) {
+	// アルバムのデータを作成
+	albums := []*pb.Album{
+		{Title: "New Album", Artist: "New Artist", Price: 10.99},
+		{Title: "New Album 2", Artist: "New Artist 2", Price: 20.99},
+		{Title: "Blue Train", Artist: "John Coltrane", Price: 56.99},
+		{Title: "Jeru", Artist: "Gerry Mulligan", Price: 17.99},
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), timeoutDuration)
+	defer cancel()
+
+	// UploadAndNotifyメソッドを呼び出して双方向ストリームを作成
+	stream, err := client.UploadAndNotify(ctx)
+	if err != nil {
+		log.Fatalf("client.UploadAndNotify failed: %v", err)
+	}
+
+	waitc := make(chan struct{})
+
+	go func() {
+		for {
+			resp, err := stream.Recv()
+			if err == io.EOF {
+				close(waitc)
+				return
+			}
+
+			if err != nil {
+				log.Fatalf("client.UploadAndNotify: stream.Recv failed: %v", err)
+			}
+
+			log.Printf("response: %v", resp)
+		}
+	}()
+
+	// 複数のリクエストをストリームに送信
+	for _, album := range albums {
+		req := &pb.UploadAndNotifyRequest{Album: album}
+		if err := stream.Send(req); err != nil {
+			log.Fatalf("client.UploadAndNotify: stream.Send(%v) failed: %v", album, err)
+		}
+
+		time.Sleep(timeSleep)
+	}
+
+	// ストリームを閉じる
+	if err := stream.CloseSend(); err != nil {
+		log.Fatalf("client.UploadAndNotify: stream.CloseSend() failed: %v", err)
+	}
+	<-waitc
+
+}
+
 func main() {
 	conn, err := grpc.NewClient(serverAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
@@ -108,6 +165,8 @@ func main() {
 
 	// callListAlbums(client, "Miles Davis")
 
+	// callGetTotalAmount(client)
+
 	// callGetAlbumを実行
-	callGetTotalAmount(client)
+	callUploadAndNotify(client)
 }

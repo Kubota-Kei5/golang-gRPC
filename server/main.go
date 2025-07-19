@@ -95,7 +95,50 @@ func (s *AlbumServer) GetTotalAmount(stream pb.AlbumService_GetTotalAmountServer
 	}
 }
 
+// Bidiirectional Streaming RPC
+// クライアントから複数のリクエストを受け取り、サーバーからも複数のレスポンスを返すメソッド
+func (s *AlbumServer) UploadAndNotify(stream pb.AlbumService_UploadAndNotifyServer) error {
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			return nil // ストリームの終端
+		}
 
+		if err != nil {
+			return err
+		}
+
+		log.Printf("request: %s", req.Album.Title)
+		res := &pb.UploadAndNotifyResponse{}
+
+		// 既存のアルバムか確認
+		for _, album := range s.savedAlbums {
+			if album.Title == req.Album.Title {
+				res.Message = fmt.Sprintf("%s is already exists", req.Album.Title)
+				break
+			}
+		}
+
+		// 新規アルバムであれば保存
+		if res.Message == "" {
+			s.savedAlbums = append(s.savedAlbums, req.Album)
+			s.UpdateAlbums(s.savedAlbums, filePath) // アルバムをファイルに保存
+			res.Message = fmt.Sprintf("%s is uploaded", req.Album.Title)
+
+			// アルバムデータをファイルに保存
+			if err := s.UpdateAlbums(s.savedAlbums, filePath); err != nil {
+				log.Printf("failed to update albums: %v", err)
+				return err
+			}
+		}
+
+		// レスポンスをストリームに送信
+		if err := stream.Send(res); err != nil {
+			return err
+		}
+	}
+
+}
 
 // サーバーの初期化時にアルバムデータをロードするメソッド
 func (s *AlbumServer) loadAlbums(filePath string) error {
@@ -110,6 +153,28 @@ func (s *AlbumServer) loadAlbums(filePath string) error {
 
     // JSONデータをGoの構造体に変換しsavedAlbumsに保存する
 	if err := json.Unmarshal(data, &s.savedAlbums); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *AlbumServer) UpdateAlbums(albums []*pb.Album, filePath string) error {
+	newFile, err := os.Create(filePath)
+	if err != nil {
+		return err
+	}
+	defer newFile.Close()
+
+	// albumリストをjson形式に変換
+	newData, err := json.MarshalIndent(albums, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	// 新しいファイルに書き込む
+	_, err = newFile.Write(newData)
+	if err != nil {
 		return err
 	}
 
