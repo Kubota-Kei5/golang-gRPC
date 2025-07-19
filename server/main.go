@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net"
 	"os"
@@ -57,6 +58,43 @@ func (s *AlbumServer) ListAlbums(req *pb.ListAlbumsRequest, stream pb.AlbumServi
 
 	return nil
 }
+
+// Client Streaming RPC
+// クライアントから複数のtitleを受け取り、ファイルに存在するAlbumの総数・合計金額・メッセージを返すメソッド
+func (s *AlbumServer) GetTotalAmount(stream pb.AlbumService_GetTotalAmountServer) error {
+	var (
+		albumCount int32
+		totalAmount float32
+	)
+
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			return stream.SendAndClose(
+				&pb.GetTotalAmountResponse{
+					AlbumCount: albumCount,
+					TotalAmount: totalAmount,
+					Message: "success to get total amount",
+				},
+			)
+		}
+		if err != nil {
+			return err
+		}
+
+		albumCount++
+
+		log.Printf("request: %s", req.Title)
+		// クライアントから受け取ったタイトルに基づいてアルバムを検索
+		for _, album := range s.savedAlbums {
+			if album.Title == req.Title {
+				totalAmount += album.Price
+				break
+			}
+		}
+	}
+}
+
 
 
 // サーバーの初期化時にアルバムデータをロードするメソッド

@@ -56,6 +56,44 @@ func callListAlbums(client pb.AlbumServiceClient, artist string) {
 	}
 }
 
+// Client Streaming RPC
+// サーバーに複数のtitleを送り、ファイルに存在するAlbumの総数・合計金額・メッセージを受け取る関数
+func callGetTotalAmount(client pb.AlbumServiceClient) {
+	titles := []string{
+		"Blue Train",
+		"Giant Steps",
+		"Speak to Evil",
+		"Weather Report",
+		"A Portrait in Jazz",
+		"Chet Baker Sings",
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), timeoutDuration)
+	defer cancel()
+
+	// GetTotalAmountメソッドを呼び出してクライアントストリームを作成
+	stream, err := client.GetTotalAmount(ctx)
+	if err != nil {
+		log.Fatalf("client.GetTotalAmount failed: %v", err)
+	}
+
+	// 複数のリクエストをストリームに送信
+	for _, title := range titles {
+		if err := stream.Send(&pb.GetTotalAmountRequest{Title: title}); err != nil {
+			log.Fatalf("client.GetTotalAmount: stream.Send(%s) failed: %v", title, err)
+		}
+
+		time.Sleep(timeSleep)
+	}
+
+	// サーバーからのレスポンスを受け取る
+	resp, err := stream.CloseAndRecv()
+	if err != nil {
+		log.Fatalf("client.GetTotalAmount: stream.CloseAndRecv failed: %v", err)
+	}
+
+	log.Printf("response: %v", resp)
+}
+
 func main() {
 	conn, err := grpc.NewClient(serverAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
@@ -65,9 +103,11 @@ func main() {
 	defer conn.Close()
 	client := pb.NewAlbumServiceClient(conn)
 
-	callGetAlbum(client, "Blue Train")
-	callGetAlbum(client, "Not Exist Title")
+	// callGetAlbum(client, "Blue Train")
+	// callGetAlbum(client, "Not Exist Title")
+
+	// callListAlbums(client, "Miles Davis")
 
 	// callGetAlbumを実行
-	callListAlbums(client, "Miles Davis")
+	callGetTotalAmount(client)
 }
