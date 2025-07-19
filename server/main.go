@@ -199,6 +199,7 @@ func main() {
 
 	grpcServer := grpc.NewServer(
 		grpc.UnaryInterceptor(interceptor.UnaryServerInterceptor()), // Unary RPCのインターセプターを設定
+		grpc.StreamInterceptor(interceptor.StreamServerInterceptor()), // Stream RPCのインターセプターを設定
 	)
 	pb.RegisterAlbumServiceServer(grpcServer, newServer()) // 作成したサーバーをgrpcServerに登録
 
