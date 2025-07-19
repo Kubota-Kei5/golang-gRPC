@@ -106,3 +106,24 @@ flowchart TD;
     rpc GetUser (GetUserRequest) returns (GetUserResponse);
   }
   ```
+
+## 4. Interceptor
+
+- 複数の RPC メソッドに適用される汎用的な処理をリクエストとレスポンスの前後に追加できる機能
+- Interceptor を使用することで、メタデータの検証やロギング、認証・認可などの機能を実装できる
+- RPC の種類によって、Unary Interceptor と Stream Interceptor の 2 種類がある
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant I1 as Interceptor 1
+    participant I2 as Interceptor 2
+    participant S as Server
+
+    C->>I1: リクエスト前処理
+    I1->>I2: 次のインターセプターへ
+    I2->>S: サービス呼び出し
+    S-->>I2: レスポンス返却
+    I2-->>I1: レスポンス処理
+    I1-->>C: クライアントへ返却
+```
